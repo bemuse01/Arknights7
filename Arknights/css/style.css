@@ -1,0 +1,88 @@
+@font-face{
+    src: url('../font/Raleway-Regular.ttf');
+    font-family: RalewayRegular;
+}
+@font-face{
+    src: url('../font/Hack-Regular.ttf');
+    font-family: HackRegular;
+}
+
+
+.hide-opening-enter-active, .hide-opening-leave-active{
+    transition: all 0.5s;
+}
+.hide-opening-enter, .hide-opening-leave-to{
+    opacity: 0;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background: black;
+    overflow: hidden;
+}
+
+/*div#phrase{
+    color: red;
+    font-family: RalewayRegular;
+}
+div#phrase div{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+div#phrase div span{
+    white-space: nowrap;
+    display: block;
+    transition: opacity 0.15s; 
+}*/
+div#overlay{
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9998;
+}
+
+div#logo-words{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 360px;
+    height: 398px;
+    -webkit-mask-image: url('../image/source/lungmen.png');
+    -webkit-mask-size: cover;
+    mask-image: url('../image/source/lungmen.png');
+    mask-size: cover;
+    z-index: 9999;
+}
+div#logo-words p{
+    width: 360px;
+    height: auto;
+    overflow: hidden;
+    color: rgb(255, 43, 43);
+    font-size: 16px;
+    font-family: HackRegular;
+}
+
+div#bg-canvas{
+    position: absolute;
+    width: calc(100vw + 100vw / 2);
+    height: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+div#bg-canvas-wrap{
+    perspective: 1000px;
+}
+div#bg-canvas-wrap canvas{
+    display: block;
+    transform: rotateX(-30deg);
+}

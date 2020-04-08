@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="author" content="Bemuse">
+        <meta name="description" content="Arknights wallpaper for Wallpaper Engine">
+        <meta name="keywords" content="html, css, js, vue.js, three.js">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="js/vue.min.js"></script>
+        <link href="css/style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div id="wrap">
+            <!--<transition name="hide-opening">
+                <div id="opening" v-show="show.opening">
+                    <div id="overlay"></div>
+                </div>
+            </transition>-->
+            <div id="main">
+                <div class="apps bg">
+                    <div id="bg-canvas">
+                        <div id="bg-canvas-wrap">
+                            <canvas ref="c" id="c"></canvas>
+                        </div>
+                    </div>
+                    <div id="bg-image">
+                        <div></div>
+                    </div>
+                </div>
+                <div class="apps logo">
+                    <div id="logo-words">
+                        <p
+                            v-for="w in logo.words"
+                            :key="w.key"
+                        >{{w.text}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="js/main.js"></script>
+    </body>
+</html>
