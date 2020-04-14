@@ -10,11 +10,6 @@
     </head>
     <body>
         <div id="wrap">
-            <!--<transition name="hide-opening">
-                <div id="opening" v-show="show.opening">
-                    <div id="overlay"></div>
-                </div>
-            </transition>-->
             <div id="main">
                 <div class="apps bg">
                     <div id="bg-canvas">
@@ -22,9 +17,54 @@
                             <canvas ref="c" id="c"></canvas>
                         </div>
                     </div>
-                    <div id="bg-image">
-                        <div></div>
+                    <!--<transition name="appear-bg">
+                        <div id="bg-image" v-show="show.bg">
+                            <div></div>
+                        </div>
+                    </transition>-->
+                </div>
+                <!--<div class="apps hexagon">
+                    <div id="hexagon-wrap">
+                        <div id="hexagon-cols-even" :style="style.hexagon.even">
+                            <div
+                                v-for="e in hexagon.cols.even"
+                                :key="e.key"
+                                :style="e.style"
+                            >
+                                <div
+                                    v-for="h in e.hexs"
+                                    :key="h.key"
+                                    :style="h.style"
+                                ></div>
+                            </div>
+                        </div>
+                        <div id="hexagon-cols-odd" :style="style.hexagon.odd">
+                            <div
+                                v-for="o in hexagon.cols.odd"
+                                :key="o.key"
+                                :style="o.style"
+                            >
+                                <div
+                                    v-for="h in o.hexs"
+                                    :key="h.key"
+                                    :style="h.style"
+                                ></div>
+                            </div>
+                        </div>
                     </div>
+                </div>-->
+                <!--<div class="apps lungmen">
+                    <div id="lungmen-title">
+                        <span></span>
+                    </div>
+                </div>-->
+                <div class="apps time">
+                    <transition name="appear-time">
+                        <div id="time-current" v-show="show.time">
+                            <span>00:00:00:000</span>
+                            <span>{{currentTime}}</span>
+                        </div>
+                    </transition>
                 </div>
                 <div class="apps logo">
                     <div id="logo-words">

@@ -6,12 +6,28 @@
     src: url('../font/Hack-Regular.ttf');
     font-family: HackRegular;
 }
+@font-face{
+    src: url('../font/digital-7 (mono).ttf');
+    font-family: digital7;
+}
 
-
-.hide-opening-enter-active, .hide-opening-leave-active{
+/*.appear-bg-enter-active{
+    transition: all 0.5s 4.5s;
+}
+.appear-bg-leave-active{
     transition: all 0.5s;
 }
-.hide-opening-enter, .hide-opening-leave-to{
+.appear-bg-enter, .appear-bg-leave-to{
+    opacity: 0;
+}*/
+
+.appear-time-enter-active{
+    transition: all 0.3s 9s;
+}
+.appear-time-leave-active{
+    transition: all 0.3s;
+}
+.appear-time-enter, .appear-time-leave-to{
     opacity: 0;
 }
 
@@ -24,50 +40,25 @@ body{
     overflow: hidden;
 }
 
-/*div#phrase{
-    color: red;
-    font-family: RalewayRegular;
-}
-div#phrase div{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-div#phrase div span{
-    white-space: nowrap;
-    display: block;
-    transition: opacity 0.15s; 
-}*/
-div#overlay{
-    background: black;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 9998;
-}
-
 div#logo-words{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 360px;
-    height: 398px;
+    width: calc(100vw * 360 / 1920 * 1.2);
+    height: calc(100vw * 398 / 1920 * 1.2);
     -webkit-mask-image: url('../image/source/lungmen.png');
     -webkit-mask-size: cover;
     mask-image: url('../image/source/lungmen.png');
     mask-size: cover;
     z-index: 9999;
+    overflow: hidden;
 }
 div#logo-words p{
-    width: 360px;
+    width: calc(100vw * 360 / 1920);
     height: auto;
-    overflow: hidden;
     color: rgb(255, 43, 43);
-    font-size: 16px;
+    font-size: 0.85vw;
     font-family: HackRegular;
 }
 
@@ -85,4 +76,55 @@ div#bg-canvas-wrap{
 div#bg-canvas-wrap canvas{
     display: block;
     transform: rotateX(-30deg);
+}
+/*div#bg-image div{
+    position: absolute;
+    background: url('../image/bg/1.jpg') no-repeat center center / cover;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.05;
+}*/
+
+/*div#lungmen-title{
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    color: rgb(255, 43, 43);
+    font-size: 20px;
+    font-family: HackRegular;
+}*/
+
+div#hexagon-wrap{
+    overflow: hidden;
+}
+div#hexagon-wrap > div{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+div#hexagon-wrap > div > div{
+    position: absolute;
+    overflow: hidden;
+}
+
+div#time-current{
+    font-size: 2.5vw;
+    font-family: digital7;
+}
+div#time-current span{
+    position: absolute;
+    width: auto;
+    height: auto;
+    bottom: calc(100vh * 120 / 1080);
+    left: 50%;
+    transform: translate(-50%, 0px);
+}
+div#time-current span:nth-child(1){
+    color: rgba(255, 43, 43, 0.25);
+}
+div#time-current span:nth-child(2){
+    color: rgba(255, 43, 43, 0.85);
 }
