@@ -34,8 +34,11 @@
                                 <div
                                     v-for="h in e.hexs"
                                     :key="h.key"
-                                    :style="h.style"
-                                ></div>
+                                    :style="h.wrapStyle"
+                                >
+                                    <div :style="h.bgStyle"></div>
+                                    <span>{{h.text}}</span>
+                                </div>
                             </div>
                         </div>
                     </div>

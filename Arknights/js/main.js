@@ -38,13 +38,18 @@ const createHexagons = () => {
         for(let j = 0; j < nh; j++){
             shapes[j] = {
                 key: j,
-                style: {
+                wrapStyle: {
                     width: `${hexagonWidth}px`,
                     height: `${hexagonHeight}px`,
                     marginBottom: j == nh - 1 ? "0" : `${g}px`,
-                    background: `url('./image/source/hex.png') no-repeat center center / cover`,
-                    opacity: 0.25
-                }
+                    //background: `url('./image/source/hex.png') no-repeat center center / cover`,
+                },
+                bgStyle: {
+                    width: `${hexagonWidth}px`,
+                    height: `${hexagonHeight}px`,
+                },
+                text: "",
+                index: 0
             }
         }
         if(i % 2 == 0){
@@ -89,7 +94,9 @@ const init = () => {
                 chance: 0.9990
             },
             hexagon: {
-                cols: hex.cols
+                cols: hex.cols,
+                text: "EMERGENCY",
+                chance: 0.850
             },
             show: {
                 bg: false,
@@ -178,6 +185,13 @@ const init = () => {
             },
 
             // hexagon
+            writeHexText(item){
+                item.text += this.hexagon.text[item.index++]
+                if(item.index == this.hexagon.text.length + 1){
+                    item.text = ""
+                    item.index = 0
+                } 
+            },
             resizeHexagon(){
                 this.hexagon.cols.length = 0
 
@@ -199,13 +213,18 @@ const init = () => {
                     for(let j = 0; j < nh; j++){
                         shapes[j] = {
                             key: j,
-                            style: {
+                            wrapStyle: {
                                 width: `${hexagonWidth}px`,
                                 height: `${hexagonHeight}px`,
                                 marginBottom: j == nh - 1 ? "0" : `${g}px`,
-                                background: `url('./image/source/hex.png') no-repeat center center / cover`,
-                                opacity: 0.25
-                            }
+                                //background: `url('./image/source/hex.png') no-repeat center center / cover`,
+                            },
+                            bgStyle: {
+                                width: `${hexagonWidth}px`,
+                                height: `${hexagonHeight}px`,
+                            },
+                            text: "",
+                            index: 0
                         }
                     }
                     if(i % 2 == 0){
@@ -269,6 +288,7 @@ const init = () => {
                 for(let item of this.logo.words) this.timeout(() => {this.changeWords(item)}, this.time.startTime, item.delay)
                 this.timeout(this.drawCanvas, this.time.startTime, this.time.afterOpening)
                 this.updateCurrentTime()
+                for(let cols of this.hexagon.cols) for(let item of cols.hexs) if(Math.random() > this.hexagon.chance) this.writeHexText(item)
             },
             animate(){
                 this.render()

@@ -97,6 +97,32 @@ div#hexagon-wrap > div{
 div#hexagon-wrap > div > div{
     position: absolute;
 }
+div#hexagon-wrap > div > div > div{
+    position: relative;
+}
+div#hexagon-wrap > div > div > div div{
+    position: relative;
+    background: url('../image/source/hex.png') no-repeat center center / cover;
+    opacity: 0.25;
+    transition: opacity 0.3s;
+}
+div#hexagon-wrap > div > div > div:hover div{
+    opacity: 1;
+}
+div#hexagon-wrap > div > div > div:hover span{
+    color: rgba(255, 43, 43, 1)
+}
+div#hexagon-wrap span{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.75vw;
+    font-family: HackRegular;
+    color: rgba(255, 43, 43, 0.4);
+    cursor: default;
+    transform: color 0.3s;
+}
 
 div#time-current{
     font-size: 2.5vw;
