@@ -1,18 +1,9 @@
 const ratio = screen.height / screen.width
 let words = []
 let hex = {
-    cols: {
-        even: [],
-        odd: []
-    },
-    shapes: {
-        even: [],
-        odd: []
-    },
-    style: {
-        even: null,
-        odd: null
-    }
+    cols: [],
+    style: null,
+    ratio: 130 / 150
 }
 
 const createWords = () => {
@@ -29,70 +20,57 @@ const createWords = () => {
     }
 }
 const createHexagons = () => {
-    let hexagonWidth = 150, hexagonHeight = 130,
-        w = hexagonWidth / 2, h = hexagonHeight / 2, g = 16,
+    let size = Math.floor(window.innerWidth / 12)
+    let hexagonWidth = size, hexagonHeight = Math.round(hexagonWidth * hex.ratio),
+        w = hexagonWidth / 2, h = hexagonHeight / 2, g = Math.floor(window.innerWidth / 120),
         dw = w ** 2, dh = h ** 2, a = Math.sqrt(dw - dh),
         b = w - a, db = b ** 2, c = Math.sqrt(dh + db),
-        nw = Math.floor((screen.width + c) / (c + hexagonWidth)) + 1,
-        nh = Math.floor((screen.height + g) / (g + hexagonHeight)) + 1,
+        nw = Math.floor((window.innerWidth + c) / (c + hexagonWidth)) + 1,
+        nh = Math.floor((window.innerHeight + g) / (g + hexagonHeight)) + 1,
         tWidth = c * (nw - 1) + hexagonWidth * nw,
         tHeight = g * (nh - 1) + hexagonHeight * nh,
         pGap = Math.sqrt((g ** 2) - (g / 2) ** 2),
         tGap = c + pGap + b
 
-    hex.style.even = {width: `calc(100vw * ${tWidth} / 1920)`, height: `calc(100vh * ${tHeight} / 1080)`}
-    hex.style.odd = {width: `calc(100vw * ${tWidth} / 1920)`, height: `calc(100vh * ${tHeight} / 1080)`}
-    for(let i = 0; i < nw; i++){
-        let evenShapes = [], oddShapes = []
+    hex.style = {width: `${tWidth}px`, height: `${tHeight + (h + g / 2)}px`}
+    for(let i = 0; i < nw * 2 - 1; i++){
+        let shapes = []
         for(let j = 0; j < nh; j++){
-            let e, o;
-            if(nw % 2 == 0) e = i >= nw / 2 - 2 && i <= nw / 2 + 1
-            else e = i >= Math.floor(nw / 2) - 1 && i < Math.floor(nw / 2) + 1
-            if(nw % 2 == 0) o = i >= nw / 2 - 2 && i <= nw / 2 + 1
-            else o = i >= Math.floor(nw / 2) - 1 && i < Math.floor(nw / 2) + 1
-            evenShapes[j] = {
+            shapes[j] = {
                 key: j,
                 style: {
-                    width: `calc(100vw * ${hexagonWidth} / 1920)`,
-                    height: `calc(100vw * ${hexagonHeight} / 1920)`,
-                    marginBottom: j == nh - 1 ? "0" : `calc(100vw * ${g} / 1920)`,
-                    background: Math.random() < 0 ? "none" : `url('./image/source/hex.png') no-repeat center center / cover`,
-                    opacity: !e && Math.random() > 0.75 ? 0.25 : 0
-                }
-            }
-            oddShapes[j] = {
-                key: j,
-                style: {
-                    width: `calc(100vw * ${hexagonWidth} / 1920)`,
-                    height: `calc(100vw * ${hexagonHeight} / 1920)`,
-                    marginBottom: j == nh - 1 ? "0" : `calc(100vw * ${g} / 1920)`,
-                    background: Math.random() < 0 ? "none" : `url('./image/source/hex.png') no-repeat center center / cover`,
-                    opacity: !o && Math.random() > 0.75 ? 0.25 : 0
+                    width: `${hexagonWidth}px`,
+                    height: `${hexagonHeight}px`,
+                    marginBottom: j == nh - 1 ? "0" : `${g}px`,
+                    background: `url('./image/source/hex.png') no-repeat center center / cover`,
+                    opacity: 0.25
                 }
             }
         }
-        hex.cols.even[i] = {
-            key: i,
-            style: {
-                width: `calc(100vw * ${hexagonWidth} / 1920)`, 
-                height: `calc(100vh * ${tHeight} / 1080)`,
-                left: i == 0 ? "0" : `calc(100vw * ${(c + hexagonWidth + (pGap * 2)) * i} / 1920)`, 
-            },
-            hexs: evenShapes
-        }
-        hex.cols.odd[i] = {
-            key: i,
-            style: {
-                width: `calc(100vw * ${hexagonWidth} / 1920)`, 
-                height: `calc(100vh * ${tHeight} / 1080)`,
-                top: `calc(100vw * ${h + g / 2} / 1920)`,
-                left: i == 0 ? `calc(100vw * ${tGap} / 1920)` : `calc(100vw * ${(c + hexagonWidth + (pGap * 2)) * i + tGap} / 1920)`, 
-            },
-            hexs: oddShapes
+        if(i % 2 == 0){
+            hex.cols[i] = {
+                key: i,
+                style: {
+                    width: `${hexagonWidth}px`, 
+                    height: `${tHeight}px`,
+                    left: i == 0 ? "0" : `${(c + (pGap * 2) + hexagonWidth) * (i / 2)}px`, 
+                },
+                hexs: shapes
+            }
+        }else{
+            hex.cols[i] = {
+                key: i,
+                style: {
+                    width: `${hexagonWidth}px`, 
+                    height: `${tHeight}px`,
+                    top: `${h + g / 2}px`,
+                    left: i == 1 ? `${tGap}px` : `${(c + (pGap * 2) + hexagonWidth) * Math.floor(i / 2) + tGap}px`, 
+                },
+                hexs: shapes
+            }
         }
     }
-    hex.cols.odd.pop()
-    console.log(tWidth, tHeight, nw, nh, c)
+    console.log(tWidth, tHeight, nw, nh, c, hex.cols)
 }
 const init = () => {
     new Vue({
@@ -110,12 +88,9 @@ const init = () => {
                 randoms: `qwerttyuiop[]{}asdfghjkl;':"zxcvbnm,./<>1234567890-=\\~!@#$%^&*()_+|QWERTYUIOPASDFGHJKLZXCVBNM`.split(""),
                 chance: 0.9990
             },
-            /*hexagon: {
-                cols: {
-                    even: hex.cols.even,
-                    odd: hex.cols.odd
-                }
-            },*/
+            hexagon: {
+                cols: hex.cols
+            },
             show: {
                 bg: false,
                 time: false
@@ -129,10 +104,7 @@ const init = () => {
                 hour: 0
             },
             style: {
-                /*hexagon: {
-                    even: hex.style.even,
-                    odd: hex.style.odd
-                }*/
+                hexagon: hex.style
             }
         },
         computed: {
@@ -205,6 +177,63 @@ const init = () => {
                 }
             },
 
+            // hexagon
+            resizeHexagon(){
+                this.hexagon.cols.length = 0
+
+                let size = Math.floor(window.innerWidth / 12)
+                let hexagonWidth = size, hexagonHeight = Math.round(hexagonWidth * hex.ratio),
+                    w = hexagonWidth / 2, h = hexagonHeight / 2, g = Math.floor(window.innerWidth / 120),
+                    dw = w ** 2, dh = h ** 2, a = Math.sqrt(dw - dh),
+                    b = w - a, db = b ** 2, c = Math.sqrt(dh + db),
+                    nw = Math.floor((window.innerWidth + c) / (c + hexagonWidth)) + 1,
+                    nh = Math.floor((window.innerHeight + g) / (g + hexagonHeight)) + 1,
+                    tWidth = c * (nw - 1) + hexagonWidth * nw,
+                    tHeight = g * (nh - 1) + hexagonHeight * nh,
+                    pGap = Math.sqrt((g ** 2) - (g / 2) ** 2),
+                    tGap = c + pGap + b
+                
+                this.style.hexagon = {width: `${tWidth}px`, height: `${tHeight + (h + g / 2)}px`}
+                for(let i = 0; i < nw * 2 - 1; i++){
+                    let shapes = []
+                    for(let j = 0; j < nh; j++){
+                        shapes[j] = {
+                            key: j,
+                            style: {
+                                width: `${hexagonWidth}px`,
+                                height: `${hexagonHeight}px`,
+                                marginBottom: j == nh - 1 ? "0" : `${g}px`,
+                                background: `url('./image/source/hex.png') no-repeat center center / cover`,
+                                opacity: 0.25
+                            }
+                        }
+                    }
+                    if(i % 2 == 0){
+                        this.hexagon.cols[i] = {
+                            key: i,
+                            style: {
+                                width: `${hexagonWidth}px`, 
+                                height: `${tHeight}px`,
+                                left: i == 0 ? "0" : `${(c + (pGap * 2) + hexagonWidth) * (i / 2)}px`, 
+                            },
+                            hexs: shapes
+                        }
+                    }else{
+                        this.hexagon.cols[i] = {
+                            key: i,
+                            style: {
+                                width: `${hexagonWidth}px`, 
+                                height: `${tHeight}px`,
+                                top: `${h + g / 2}px`,
+                                left: i == 1 ? `${tGap}px` : `${(c + (pGap * 2) + hexagonWidth) * Math.floor(i / 2) + tGap}px`, 
+                            },
+                            hexs: shapes
+                        }
+                    }
+                }
+                console.log(tWidth, tHeight, nw, nh)
+            },
+
             // show
             appearTime(){
                 this.show.time = true
@@ -230,6 +259,7 @@ const init = () => {
             onWindowResize(){
                 this.$refs.c.width = window.innerWidth + (window.innerWidth / 2)
                 this.$refs.c.height = window.innerHeight + (window.innerHeight / (2 * ratio))
+                this.resizeHexagon()
             },
             timeout(callback, startTime, delay){
                 let currentTime = window.performance.now()
@@ -256,5 +286,5 @@ const init = () => {
     })
 }
 createWords()
-//createHexagons()
+createHexagons()
 init()

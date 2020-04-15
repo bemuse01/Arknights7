@@ -85,29 +85,17 @@ div#bg-canvas-wrap canvas{
     opacity: 0.05;
 }*/
 
-/*div#lungmen-title{
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -20%);
-    color: rgb(255, 43, 43);
-    font-size: 20px;
-    font-family: HackRegular;
-}*/
-
-div#hexagon-wrap{
+/*div#hexagon-wrap{
     overflow: hidden;
-}
+}*/
 div#hexagon-wrap > div{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    overflow: hidden;
 }
 div#hexagon-wrap > div > div{
     position: absolute;
-    overflow: hidden;
 }
 
 div#time-current{

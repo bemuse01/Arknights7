@@ -23,11 +23,11 @@
                         </div>
                     </transition>-->
                 </div>
-                <!--<div class="apps hexagon">
+                <div class="apps hexagon">
                     <div id="hexagon-wrap">
-                        <div id="hexagon-cols-even" :style="style.hexagon.even">
+                        <div id="hexagon-cols" :style="style.hexagon">
                             <div
-                                v-for="e in hexagon.cols.even"
+                                v-for="e in hexagon.cols"
                                 :key="e.key"
                                 :style="e.style"
                             >
@@ -38,26 +38,8 @@
                                 ></div>
                             </div>
                         </div>
-                        <div id="hexagon-cols-odd" :style="style.hexagon.odd">
-                            <div
-                                v-for="o in hexagon.cols.odd"
-                                :key="o.key"
-                                :style="o.style"
-                            >
-                                <div
-                                    v-for="h in o.hexs"
-                                    :key="h.key"
-                                    :style="h.style"
-                                ></div>
-                            </div>
-                        </div>
                     </div>
-                </div>-->
-                <!--<div class="apps lungmen">
-                    <div id="lungmen-title">
-                        <span></span>
-                    </div>
-                </div>-->
+                </div>
                 <div class="apps time">
                     <transition name="appear-time">
                         <div id="time-current" v-show="show.time">
