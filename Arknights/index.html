@@ -27,17 +27,18 @@
                     <div id="hexagon-wrap">
                         <div id="hexagon-cols" :style="style.hexagon">
                             <div
-                                v-for="e in hexagon.cols"
+                                v-for="(e, i) in hexagon.cols"
                                 :key="e.key"
                                 :style="e.style"
                             >
                                 <div
-                                    v-for="h in e.hexs"
+                                    v-for="(h, j) in e.hexs"
                                     :key="h.key"
                                     :style="h.wrapStyle"
                                 >
-                                    <div :style="h.bgStyle"></div>
-                                    <span>{{h.text}}</span>
+                                    <div :style="[h.bgStyle, hexagon.opacity[(i * e.hexs.length) + j].div]"></div>
+                                    <span :style="hexagon.opacity[(i * e.hexs.length) + j].span">{{h.text}}</span>
+                                    <!--<span>{{h.text}}</span>-->
                                 </div>
                             </div>
                         </div>

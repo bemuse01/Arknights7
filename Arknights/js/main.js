@@ -3,7 +3,10 @@ let words = []
 let hex = {
     cols: [],
     style: null,
-    ratio: 130 / 150
+    ratio: 130 / 150,
+    arr: ["EMERGENCY", "URGENCY", "WARNING", "CAUTION"],
+    opacity: [],
+    size: 8
 }
 
 const createWords = () => {
@@ -15,12 +18,66 @@ const createWords = () => {
             text: text,
             len: text.length,
             index: 0,
-            delay: i * 120 + 2000
+            delay: i * 120 + 1000 + hex.cols[hex.cols.length - 1].hexs[hex.cols[hex.cols.length - 1].hexs.length - 1].delay
+        }
+    }
+}
+const setHexagonCols = (obj, hexagonWidth, hexagonHeight, nw, nh, h, g, c, tHeight, tGap, pGap, isTransparent) => {
+    let count = 0
+    for(let i = 0; i < nw * 2 - 1; i++){
+        let shapes = []
+        for(let j = 0; j < nh; j++){
+            shapes[j] = {
+                key: count,
+                wrapStyle: {
+                    width: `${hexagonWidth}px`,
+                    height: `${hexagonHeight}px`,
+                    marginBottom: j == nh - 1 ? "0" : `${g}px`,
+                    opacity: isTransparent == true ? 0 : 1.0
+                    //background: `url('./image/source/hex.png') no-repeat center center / cover`,
+                },
+                bgStyle: {
+                    width: `${hexagonWidth}px`,
+                    height: `${hexagonHeight}px`,
+                },
+                text: "",
+                word: hex.arr[Math.floor(Math.random() * hex.arr.length)],
+                index: 0,
+                delay: count * 18 + 1000
+            }
+            //obj.opacity[count] = {opacity: 0.25}
+            obj.opacity[count] = {
+                div: {opacity: 0.25},
+                span: {color: "rgba(255, 43, 43, 0.35)"}
+            }
+            count++
+        }
+        if(i % 2 == 0){
+            obj.cols[i] = {
+                key: i,
+                style: {
+                    width: `${hexagonWidth}px`, 
+                    height: `${tHeight}px`,
+                    left: i == 0 ? "0" : `${(c + (pGap * 2) + hexagonWidth) * (i / 2)}px`, 
+                },
+                hexs: shapes
+            }
+        }else{
+            obj.cols[i] = {
+                key: i,
+                style: {
+                    width: `${hexagonWidth}px`, 
+                    height: `${tHeight}px`,
+                    top: `${h + g / 2}px`,
+                    left: i == 1 ? `${tGap}px` : `${(c + (pGap * 2) + hexagonWidth) * Math.floor(i / 2) + tGap}px`, 
+                },
+                hexs: shapes
+            }
         }
     }
 }
 const createHexagons = () => {
-    let size = Math.floor(window.innerWidth / 12)
+    let size = Math.floor(window.innerWidth / hex.size)
     let hexagonWidth = size, hexagonHeight = Math.round(hexagonWidth * hex.ratio),
         w = hexagonWidth / 2, h = hexagonHeight / 2, g = Math.floor(window.innerWidth / 120),
         dw = w ** 2, dh = h ** 2, a = Math.sqrt(dw - dh),
@@ -33,49 +90,7 @@ const createHexagons = () => {
         tGap = c + pGap + b
 
     hex.style = {width: `${tWidth}px`, height: `${tHeight + (h + g / 2)}px`}
-    for(let i = 0; i < nw * 2 - 1; i++){
-        let shapes = []
-        for(let j = 0; j < nh; j++){
-            shapes[j] = {
-                key: j,
-                wrapStyle: {
-                    width: `${hexagonWidth}px`,
-                    height: `${hexagonHeight}px`,
-                    marginBottom: j == nh - 1 ? "0" : `${g}px`,
-                    //background: `url('./image/source/hex.png') no-repeat center center / cover`,
-                },
-                bgStyle: {
-                    width: `${hexagonWidth}px`,
-                    height: `${hexagonHeight}px`,
-                },
-                text: "",
-                index: 0
-            }
-        }
-        if(i % 2 == 0){
-            hex.cols[i] = {
-                key: i,
-                style: {
-                    width: `${hexagonWidth}px`, 
-                    height: `${tHeight}px`,
-                    left: i == 0 ? "0" : `${(c + (pGap * 2) + hexagonWidth) * (i / 2)}px`, 
-                },
-                hexs: shapes
-            }
-        }else{
-            hex.cols[i] = {
-                key: i,
-                style: {
-                    width: `${hexagonWidth}px`, 
-                    height: `${tHeight}px`,
-                    top: `${h + g / 2}px`,
-                    left: i == 1 ? `${tGap}px` : `${(c + (pGap * 2) + hexagonWidth) * Math.floor(i / 2) + tGap}px`, 
-                },
-                hexs: shapes
-            }
-        }
-    }
-    console.log(tWidth, tHeight, nw, nh, c, hex.cols)
+    setHexagonCols(hex, hexagonWidth, hexagonHeight, nw, nh, h, g, c, tHeight, tGap, pGap, true)
 }
 const init = () => {
     new Vue({
@@ -91,12 +106,15 @@ const init = () => {
                 points: [],
                 fontSize: 11,
                 randoms: `qwerttyuiop[]{}asdfghjkl;':"zxcvbnm,./<>1234567890-=\\~!@#$%^&*()_+|QWERTYUIOPASDFGHJKLZXCVBNM`.split(""),
-                chance: 0.9990
+                chance: 0.9995
             },
             hexagon: {
                 cols: hex.cols,
-                text: "EMERGENCY",
-                chance: 0.850
+                chance: {
+                    a: 0.8250,
+                    b: 0.90
+                },
+                opacity: hex.opacity
             },
             show: {
                 bg: false,
@@ -155,13 +173,14 @@ const init = () => {
 
             // main canvas
             initCanvas(){
-                this.$refs.c.width = window.innerWidth + (window.innerWidth / 2)
-                this.$refs.c.height = window.innerHeight + (window.innerHeight / (2 * ratio))
+                //this.$refs.c.width = window.innerWidth + (window.innerWidth / 2)
+                //this.$refs.c.height = window.innerHeight + (window.innerHeight / (2 * ratio))
+                this.$refs.c.width = window.innerWidth
+                this.$refs.c.height = window.innerHeight
                 let ctx = this.$refs.c.getContext("2d")
                 this.bg.ctx = ctx
                 this.bg.columns = Math.floor(c.width / this.bg.fontSize) + Math.floor(c.height / this.bg.fontSize)
                 for(let i = 0; i < this.bg.columns; i++) this.bg.points[i] = i % 2 == 0 ? 0 : Math.floor(this.$refs.c.height / this.bg.fontSize) + 1
-                console.log(this.bg, this.$refs.c)
             },
             drawCanvas(){
                 this.bg.ctx.fillStyle = "rgba(0, 0, 0, 0.05)"
@@ -173,29 +192,38 @@ const init = () => {
                     let text = this.bg.randoms[Math.floor(Math.random() * this.bg.randoms.length)]
                     let heightColumns = Math.floor(this.$refs.c.height / this.bg.fontSize)
                     if(i % 2 == 0){
-                        this.bg.ctx.fillText(text, (i - heightColumns) * this.bg.fontSize + this.bg.points[i] * this.bg.fontSize, this.bg.points[i] * this.bg.fontSize);
-                        if(this.bg.points[i] * this.bg.fontSize > this.$refs.c.height && Math.random() > this.bg.chance) this.bg.points[i] = 0;
-                        this.bg.points[i]++;
+                        this.bg.ctx.fillText(text, (i - heightColumns) * this.bg.fontSize + this.bg.points[i] * this.bg.fontSize, this.bg.points[i] * this.bg.fontSize)
+                        if(this.bg.points[i] * this.bg.fontSize > this.$refs.c.height && Math.random() > this.bg.chance) this.bg.points[i] = 0
+                        this.bg.points[i]++
                     }else{
-                        this.bg.ctx.fillText(text, (i - heightColumns) * this.bg.fontSize + this.bg.points[i] * this.bg.fontSize, this.bg.points[i] * this.bg.fontSize);
-                        if(this.bg.points[i] * this.bg.fontSize < 0 && Math.random() > this.bg.chance) this.bg.points[i] = heightColumns + 1;
-                        this.bg.points[i]--;
+                        this.bg.ctx.fillText(text, (i - heightColumns) * this.bg.fontSize + this.bg.points[i] * this.bg.fontSize, this.bg.points[i] * this.bg.fontSize)
+                        if(this.bg.points[i] * this.bg.fontSize < 0 && Math.random() > this.bg.chance) this.bg.points[i] = heightColumns + 1
+                        this.bg.points[i]--
                     }
                 }
             },
 
             // hexagon
             writeHexText(item){
-                item.text += this.hexagon.text[item.index++]
-                if(item.index == this.hexagon.text.length + 1){
+                item.text += item.word[item.index++]
+                if(item.index == item.word.length + 1){
                     item.text = ""
+                    item.word = hex.arr[Math.floor(Math.random() * hex.arr.length)]
                     item.index = 0
+                    if(Math.random() > this.hexagon.chance.b) {
+                        this.hexagon.opacity[item.key].div.opacity = 1
+                        this.hexagon.opacity[item.key].span.color = "rgba(255, 43, 43, 1.0)"
+                    }
+                    else {
+                        this.hexagon.opacity[item.key].div.opacity = 0.25
+                        this.hexagon.opacity[item.key].span.color = "rgba(255, 43, 43, 0.35)"
+                    }
                 } 
             },
             resizeHexagon(){
                 this.hexagon.cols.length = 0
 
-                let size = Math.floor(window.innerWidth / 12)
+                let size = Math.floor(window.innerWidth / hex.size)
                 let hexagonWidth = size, hexagonHeight = Math.round(hexagonWidth * hex.ratio),
                     w = hexagonWidth / 2, h = hexagonHeight / 2, g = Math.floor(window.innerWidth / 120),
                     dw = w ** 2, dh = h ** 2, a = Math.sqrt(dw - dh),
@@ -208,49 +236,14 @@ const init = () => {
                     tGap = c + pGap + b
                 
                 this.style.hexagon = {width: `${tWidth}px`, height: `${tHeight + (h + g / 2)}px`}
-                for(let i = 0; i < nw * 2 - 1; i++){
-                    let shapes = []
-                    for(let j = 0; j < nh; j++){
-                        shapes[j] = {
-                            key: j,
-                            wrapStyle: {
-                                width: `${hexagonWidth}px`,
-                                height: `${hexagonHeight}px`,
-                                marginBottom: j == nh - 1 ? "0" : `${g}px`,
-                                //background: `url('./image/source/hex.png') no-repeat center center / cover`,
-                            },
-                            bgStyle: {
-                                width: `${hexagonWidth}px`,
-                                height: `${hexagonHeight}px`,
-                            },
-                            text: "",
-                            index: 0
-                        }
-                    }
-                    if(i % 2 == 0){
-                        this.hexagon.cols[i] = {
-                            key: i,
-                            style: {
-                                width: `${hexagonWidth}px`, 
-                                height: `${tHeight}px`,
-                                left: i == 0 ? "0" : `${(c + (pGap * 2) + hexagonWidth) * (i / 2)}px`, 
-                            },
-                            hexs: shapes
-                        }
-                    }else{
-                        this.hexagon.cols[i] = {
-                            key: i,
-                            style: {
-                                width: `${hexagonWidth}px`, 
-                                height: `${tHeight}px`,
-                                top: `${h + g / 2}px`,
-                                left: i == 1 ? `${tGap}px` : `${(c + (pGap * 2) + hexagonWidth) * Math.floor(i / 2) + tGap}px`, 
-                            },
-                            hexs: shapes
-                        }
-                    }
+                setHexagonCols(this.hexagon, hexagonWidth, hexagonHeight, nw, nh, h, g, c, tHeight, tGap, pGap, false)
+            },
+            showHexagons(){
+                for(let cols of this.hexagon.cols){
+                    for(let item of cols.hexs) setTimeout(() => {
+                        item.wrapStyle.opacity = 1.0
+                    }, item.delay)
                 }
-                console.log(tWidth, tHeight, nw, nh)
             },
 
             // show
@@ -276,8 +269,10 @@ const init = () => {
 
             // render
             onWindowResize(){
-                this.$refs.c.width = window.innerWidth + (window.innerWidth / 2)
-                this.$refs.c.height = window.innerHeight + (window.innerHeight / (2 * ratio))
+                //this.$refs.c.width = window.innerWidth + (window.innerWidth / 2)
+                //this.$refs.c.height = window.innerHeight + (window.innerHeight / (2 * ratio))
+                this.$refs.c.width = window.innerWidth
+                this.$refs.c.height = window.innerHeight
                 this.resizeHexagon()
             },
             timeout(callback, startTime, delay){
@@ -288,7 +283,7 @@ const init = () => {
                 for(let item of this.logo.words) this.timeout(() => {this.changeWords(item)}, this.time.startTime, item.delay)
                 this.timeout(this.drawCanvas, this.time.startTime, this.time.afterOpening)
                 this.updateCurrentTime()
-                for(let cols of this.hexagon.cols) for(let item of cols.hexs) if(Math.random() > this.hexagon.chance) this.writeHexText(item)
+                for(let cols of this.hexagon.cols) for(let item of cols.hexs) if(Math.random() > this.hexagon.chance.a) this.writeHexText(item)
             },
             animate(){
                 this.render()
@@ -300,11 +295,12 @@ const init = () => {
                 this.initCanvas()
                 this.appearApps()
                 this.animate()
+                this.showHexagons()
                 window.addEventListener('resize', this.onWindowResize, false)
             }
         }
     })
 }
+createHexagons(hex)
 createWords()
-createHexagons()
 init()

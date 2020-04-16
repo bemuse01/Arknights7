@@ -64,18 +64,20 @@ div#logo-words p{
 
 div#bg-canvas{
     position: absolute;
-    width: calc(100vw + 100vw / 2);
+    /*width: calc(100vw + 100vw / 2);
     height: auto;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);*/
+    width: 100vw;
+    height: 100vh;
 }
-div#bg-canvas-wrap{
+/*div#bg-canvas-wrap{
     perspective: 1000px;
-}
+}*/
 div#bg-canvas-wrap canvas{
     display: block;
-    transform: rotateX(-30deg);
+    /*transform: rotateX(-30deg);*/
 }
 /*div#bg-image div{
     position: absolute;
@@ -103,25 +105,24 @@ div#hexagon-wrap > div > div > div{
 div#hexagon-wrap > div > div > div div{
     position: relative;
     background: url('../image/source/hex.png') no-repeat center center / cover;
-    opacity: 0.25;
     transition: opacity 0.3s;
 }
-div#hexagon-wrap > div > div > div:hover div{
+/*div#hexagon-wrap > div > div > div:hover div{
     opacity: 1;
 }
 div#hexagon-wrap > div > div > div:hover span{
     color: rgba(255, 43, 43, 1)
-}
+}*/
 div#hexagon-wrap span{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 0.75vw;
-    font-family: HackRegular;
-    color: rgba(255, 43, 43, 0.4);
+    font-size: 1.2vw;
+    font-family: digital7;
+    /*color: rgba(255, 43, 43, 0.35);*/
     cursor: default;
-    transform: color 0.3s;
+    transition: color 0.3s;
 }
 
 div#time-current{
